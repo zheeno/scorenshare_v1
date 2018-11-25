@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import getTheme from "../themes/components";
 import scorenshareTheme from "../themes/variables/scorenshareTheme";
-import AppHeader from "../components/AppHeader";
 import AppNavFooter from "../components/AppNavFooter";
 import { Image, ScrollView } from "react-native";
 import { styles } from "../themes/variables/customStyles";
@@ -32,10 +31,6 @@ import { GetData } from "../services/ApiCaller";
 import SidePanel from "../components/SidePanel";
 
 export default class HomeScreen extends Component {
-  componentDidMount() {
-    // const { id } = this.props.match.params;
-    this.initLandingPage();
-  }
   constructor(props) {
     super(props);
     this.state = {
@@ -90,14 +85,6 @@ export default class HomeScreen extends Component {
   // ]
   // };
 
-  static navigationOptions = {
-    headerTitle: <AppHeader />,
-    headerStyle: {
-      height: 50,
-      backgroundColor: "#310a11"
-    }
-  };
-
   initLandingPage = () => {
     this.setState({ isLoading: true });
     GetData("initLandingPage?resType=json")
@@ -118,6 +105,11 @@ export default class HomeScreen extends Component {
         });
       });
   };
+
+  componentDidMount() {
+    // const { id } = this.props.match.params;
+    this.initLandingPage();
+  }
 
   render() {
     const { navigate } = this.props.navigation;

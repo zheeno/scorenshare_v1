@@ -28,9 +28,17 @@ const MusicCard = props => {
             numberOfLines={1}
             style={[styles.greyText, styles.musicCardTitle]}
           >
-            {props.content.title}
+            {props.content.downloads}
           </Text>
         </Body>
+      </CardItem>
+      <CardItem footer style={[styles.bgDark, { paddingTop: 0 }]}>
+        <Text
+          numberOfLines={1}
+          style={[styles.greyText, styles.musicCardTitle]}
+        >
+          {props.content.title}
+        </Text>
       </CardItem>
     </Card>
   );

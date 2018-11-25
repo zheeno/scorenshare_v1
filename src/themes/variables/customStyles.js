@@ -55,13 +55,14 @@ export const styles = StyleSheet.create({
   },
   musicCard: {
     borderColor: "#101010",
-    width: 150,
+    width: 170,
     margin: 10,
     borderRadius: 5,
-    padding: 0
+    padding: 0,
+    marginRight: 10
   },
   musicCardTitle: {
-    fontSize: 13
+    fontSize: 10
   },
   catalogueCardTitle: {
     borderColor: "#101010",
@@ -135,15 +136,15 @@ export const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    justifyContent: 'flex-start',
-    alignItems: 'center',
+    justifyContent: "flex-start",
+    alignItems: "center",
     marginTop: 25,
     backgroundColor: "red"
-},
+  },
   pdf: {
-    flex:1,
-    width:Dimensions.get('window').width,
-},
+    flex: 1,
+    width: Dimensions.get("window").width
+  },
   // flex
   flexColumn: {
     flex: 1

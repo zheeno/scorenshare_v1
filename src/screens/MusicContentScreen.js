@@ -19,15 +19,6 @@ import { LoaderOverlay, ErrorOverlay } from "../components/MiscComponents";
 import { GetData } from "../services/ApiCaller";
 import MusicInfoModal from "../components/Music/MusicInfoModal";
 
-var BUTTONS = [
-  { text: "Report", icon: "ios-paper-plane", iconColor: "#2c8ef4" },
-  { text: "Related Music", icon: "ios-musical-notes", iconColor: "#f42ced" },
-  { text: "Delete", icon: "trash", iconColor: "#fa213b" },
-  { text: "Minimize", icon: "ios-arrow-down", iconColor: "#25de5b" }
-];
-var DESTRUCTIVE_INDEX = 3;
-var CANCEL_INDEX = 4;
-
 class MusicContentScreen extends Component {
   componentDidMount() {
     this.initMusicContentPage();
@@ -51,7 +42,41 @@ class MusicContentScreen extends Component {
       musicObj: [],
       like: false
     };
+
+    this.BUTTONS = [
+      {
+        text: "Report",
+        icon: "ios-paper-plane",
+        iconColor: "#2c8ef4",
+        action: "report"
+      },
+      {
+        text: "Edit",
+        icon: "ios-doc",
+        iconColor: "#f42ced",
+        action: "edit"
+      },
+      {
+        text: "Delete",
+        icon: "trash",
+        iconColor: "#fa213b",
+        action: "delete",
+        destroy: true
+      },
+      {
+        text: "Minimize",
+        icon: "ios-arrow-down",
+        iconColor: "#25de5b",
+        cancel: true
+      }
+    ];
+    // dynamically find destructive and cancel indexes
+    this.index = 0;
+    this.DESTRUCTIVE_INDEX = null;
+    this.CANCEL_INDEX = null;
+    this.buttonIndexes = this.buttonIndexes.bind(this);
   }
+  // const source = {uri:'http://samples.leanpub.com/thereactnativebook-sample.pdf',cache:true};
 
   initMusicContentPage = () => {
     musId = this.props.navigation.getParam("id", "NULL");
@@ -66,6 +91,7 @@ class MusicContentScreen extends Component {
           catalogue: response.catalogue,
           musicObj: response.musicObj
         });
+        this.buttonIndexes();
       })
       .catch(error => {
         this.setState({
@@ -102,6 +128,18 @@ class MusicContentScreen extends Component {
         </Text>
       );
     }
+  };
+
+  buttonIndexes = () => {
+    this.BUTTONS.forEach(button => {
+      if (button.destroy) {
+        this.DESTRUCTIVE_INDEX = this.index;
+      }
+      if (button.cancel) {
+        this.CANCEL_INDEX = this.index;
+      }
+      this.index++;
+    });
   };
 
   static navigationOptions = ({ navigation }) => {
@@ -173,20 +211,21 @@ class MusicContentScreen extends Component {
                 ]}
               >
                 <ScrollView>
-                  {/* <View style={styles.PdfContainer}>
-                <Pdf
-                    source={source}
-                    onLoadComplete={(numberOfPages,filePath)=>{
+                  {/* <View style={styles.PdfContainer}> 
+                     <Pdf
+                      source={source}
+                      onLoadComplete={(numberOfPages, filePath) => {
                         console.log(`number of pages: ${numberOfPages}`);
-                    }}
-                    onPageChanged={(page,numberOfPages)=>{
+                      }}
+                      onPageChanged={(page, numberOfPages) => {
                         console.log(`current page: ${page}`);
-                    }}
-                    onError={(error)=>{
+                      }}
+                      onError={error => {
                         console.log(error);
-                    }}
-                    style={styles.pdf}/> 
-            </View>*/}
+                      }}
+                      style={styles.pdf}
+                    />
+                  </View> */}
                 </ScrollView>
               </Row>
               <FooterPlayer
@@ -228,28 +267,36 @@ class MusicContentScreen extends Component {
                 ActionSheet={() =>
                   ActionSheet.show(
                     {
-                      options: BUTTONS,
-                      cancelButtonIndex: CANCEL_INDEX,
-                      destructiveButtonIndex: DESTRUCTIVE_INDEX,
+                      options: this.BUTTONS,
+                      cancelButtonIndex: this.CANCEL_INDEX,
+                      destructiveButtonIndex: this.DESTRUCTIVE_INDEX,
                       title: "Options"
                     },
                     buttonIndex => {
-                      this.setState({ clicked: BUTTONS[buttonIndex] });
+                      this.setState({ clicked: this.BUTTONS[buttonIndex] });
                       this.setModalVisible(false);
-                      switch (buttonIndex) {
-                        case 0:
-                          // alert(buttonIndex);
-                          break;
-                        case 1:
-                          navigate("CatalogueContent", {
-                            id: this.state.musicObj.music.category_id,
-                            title: this.state.musicObj.category,
-                            content: null
-                          });
-                          break;
-                        default:
-                          // alert("Clicked " + buttonIndex);
-                          break;
+                      let action = this.BUTTONS[buttonIndex].action;
+                      if (action != undefined) {
+                        switch (action.toLowerCase()) {
+                          case "report":
+                            // alert(buttonIndex);
+                            break;
+                          case "edit":
+                            // edit music piece
+                            break;
+                          case "delete":
+                            // delete music piece
+                            break;
+                          case "related":
+                            navigate("CatalogueContent", {
+                              id: this.state.musicObj.music.category_id,
+                              title: this.state.musicObj.music.category
+                            });
+                            break;
+                          default:
+                            // do nothing
+                            break;
+                        }
                       }
                     }
                   )
