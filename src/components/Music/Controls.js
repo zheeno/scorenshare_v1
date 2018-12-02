@@ -1,19 +1,13 @@
 import React, { Component } from "react";
 
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
-import { Icon, Button } from "native-base";
+import { Icon, Button, Spinner } from "native-base";
 
 const Controls = ({
   paused,
-  shuffleOn,
-  repeatOn,
   onPressPlay,
   onPressPause,
-  onBack,
-  onForward,
-  onPressShuffle,
-  onPressRepeat,
-  forwardDisabled,
+  playerState,
   toggleModal,
   like,
   onLike
@@ -37,7 +31,11 @@ const Controls = ({
       />
     </TouchableOpacity> */}
     <View style={{ width: 20 }} />
-    {!paused ? (
+    {playerState == "BUFFERING" ? (
+      <View style={styles.playButton}>
+        <Spinner color="#eee" />
+      </View>
+    ) : playerState == "PLAYING" ? (
       <TouchableOpacity onPress={onPressPause}>
         <View style={styles.playButton}>
           <Image

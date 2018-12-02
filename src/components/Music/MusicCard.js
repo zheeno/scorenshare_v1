@@ -1,6 +1,6 @@
 import React from "react";
 import { Image } from "react-native";
-import { Card, CardItem, Text, Body } from "native-base";
+import { Card, CardItem, Text, Body, Icon } from "native-base";
 import { styles } from "../../themes/variables/customStyles";
 
 const MusicCard = props => {
@@ -13,8 +13,8 @@ const MusicCard = props => {
         style={styles.bgDark}
         onPress={() =>
           navigate("MusicContent", {
-            id: props.content.id,
-            title: props.content.title,
+            id: props.content.music.id,
+            title: props.content.music.title,
             content: JSON.stringify(props.content)
           })
         }
@@ -24,11 +24,23 @@ const MusicCard = props => {
             source={require("../assets/img/Background-Music-Icon.png")}
             style={styles.thumbnail}
           />
-          <Text
-            numberOfLines={1}
-            style={[styles.greyText, styles.musicCardTitle]}
-          >
-            {props.content.downloads}
+          <Text numberOfLines={1} style={[styles.greyText]}>
+            <Text style={[styles.greyText, styles.musicCardTitle]}>
+              <Icon
+                name="ios-cloud-download"
+                style={[styles.greyText, { fontSize: 11 }]}
+              />
+              &nbsp;
+              {props.content.downloads}
+            </Text>
+            &nbsp;&middot;&nbsp;
+            {Number(props.content.price) > 0 ? (
+              <Text style={[styles.greyText, styles.musicCardTitle]}>
+                &#8358;{props.content.price}
+              </Text>
+            ) : (
+              <Text style={[styles.greyText, styles.musicCardTitle]}>FREE</Text>
+            )}
           </Text>
         </Body>
       </CardItem>
@@ -37,7 +49,7 @@ const MusicCard = props => {
           numberOfLines={1}
           style={[styles.greyText, styles.musicCardTitle]}
         >
-          {props.content.title}
+          {props.content.music.title}
         </Text>
       </CardItem>
     </Card>

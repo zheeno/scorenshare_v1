@@ -11,7 +11,8 @@ import {
   Label,
   Input,
   Form,
-  Container
+  Container,
+  Spinner
 } from "native-base";
 import getTheme from "../themes/components";
 import scorenshareTheme from "../themes/variables/scorenshareTheme";
@@ -23,6 +24,29 @@ import {
 } from "../components/MiscComponents";
 
 class LoginScreen extends Component {
+  componentDidMount() {}
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      verifying: false,
+      username: "",
+      password: ""
+    };
+  }
+  initLogin() {
+    var username = this.state.username;
+    var password = this.state.password;
+    this.setState({ verifying: false });
+    alert(username + " " + password);
+    if (username.length > 0 && password.length > 0) {
+      alert(username + " " + password);
+      this.setState({ verifying: true });
+    } else {
+      // alert user
+      this.setState({ verifying: false });
+    }
+  }
   render() {
     return (
       <StyleProvider style={getTheme(scorenshareTheme)}>
@@ -39,7 +63,7 @@ class LoginScreen extends Component {
                 }
               ]}
             >
-              <View style={{ flex: 1, backgroundColor: "red" }} />
+              <View style={{ flex: 1 }} />
               <View style={[{ flex: 8 }]}>
                 <View>
                   <H1 style={styles.redText}>Login</H1>
@@ -49,17 +73,41 @@ class LoginScreen extends Component {
                     <Item floatingLabel>
                       <Label>Username</Label>
                       <Icon name="ios-person" style={styles.greyText} />
-                      <Input style={styles.greyText} />
+                      <Input
+                        style={styles.greyText}
+                        onChangeText={text => {
+                          this.setState({ username: text });
+                        }}
+                      />
                     </Item>
                     <Item floatingLabel style={{ marginTop: 10 }}>
                       <Label>Password</Label>
                       <Icon name="ios-lock" style={styles.greyText} />
-                      <Input style={styles.greyText} secureTextEntry={true} />
+                      <Input
+                        style={styles.greyText}
+                        secureTextEntry={true}
+                        onChangeText={text => {
+                          this.setState({ password: text });
+                        }}
+                      />
                     </Item>
                     <View style={{ paddingTop: 30 }}>
-                      <Button full iconRight style={{ borderRadius: 20 }}>
+                      <Button
+                        full
+                        iconRight
+                        style={{ borderRadius: 20 }}
+                        onPress={() => {
+                          this.initLogin();
+                        }}
+                      >
                         <Text>Login</Text>
-                        <Icon name="md-log-in" />
+
+                        <Icon
+                          name={
+                            this.state.verifying ? "md-spinner" : "md-log-in"
+                          }
+                          type="MaterialIcons"
+                        />
                       </Button>
                     </View>
                   </Form>

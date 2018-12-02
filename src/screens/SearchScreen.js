@@ -30,6 +30,7 @@ import { GetData } from "../services/ApiCaller";
 import MusicListItem from "../components/Music/MusicListItem";
 import ComposerCard from "../components/Composer/ComposerCard";
 import MusicCard from "../components/Music/MusicCard";
+import ComposerListItem from "../components/Composer/ComposerListItem";
 
 class SearchScreen extends Component {
   constructor(props) {
@@ -306,22 +307,30 @@ class SearchScreen extends Component {
         </Row>
         <Row
           style={{
-            flexDirection: "row",
             alignContent: "center",
             justifyContent: "center",
             paddingBottom: 30
           }}
         >
           {/* loop through composers */}
-          {params.searchResults.map(result => (
+          <List
+            dataArray={params.searchResults}
+            renderRow={result => (
+              <ComposerListItem content={result.composerDetails} nav={params.navigation} />
+            )}
+          />
+          {/* {params.searchResults.map(result => (
             <View
               horizontal
               key={"com_" + result.composerDetails.id}
               style={{ alignSelf: "auto", alignItems: "center", flex: 1 }}
             >
-              <ComposerCard content={result} />
+              <ComposerCard
+                content={result.composerDetails}
+                nav={params.navigation}
+              />
             </View>
-          ))}
+          ))} */}
         </Row>
       </React.Fragment>
     );

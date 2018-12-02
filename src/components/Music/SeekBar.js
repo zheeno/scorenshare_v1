@@ -32,7 +32,7 @@ const SeekBar = ({ trackLength, currentPosition, onSeek, onSlidingStart }) => {
         <Text style={styles.text}>{elapsed[0] + ":" + elapsed[1]}</Text>
         <View style={{ flex: 1 }} />
         <Text style={[styles.text, { width: 40 }]}>
-          {/*trackLength > 1 &&*/ "-" + remaining[0] + ":" + remaining[1]}
+          {trackLength > 1 && "-" + remaining[0] + ":" + remaining[1]}
         </Text>
       </View>
     </View>
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     width: 10,
     height: 10,
     borderRadius: 5,
-    backgroundColor: "white"
+    backgroundColor: "#d00e26"
   },
   text: {
     color: "rgba(255, 255, 255, 0.72)",

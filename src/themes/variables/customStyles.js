@@ -138,12 +138,23 @@ export const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "flex-start",
     alignItems: "center",
-    marginTop: 25,
-    backgroundColor: "red"
+    marginTop: 25
+  },
+  PdfContainer: {
+    flex: 7,
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    backgroundColor: "#ddd"
+  },
+  PdfFooter: {
+    flex: 1,
+    flexDirection: "row",
+    paddingLeft: 50
   },
   pdf: {
     flex: 1,
-    width: Dimensions.get("window").width
+    width: Dimensions.get("window").width,
+    backgroundColor: "#ddd"
   },
   // flex
   flexColumn: {

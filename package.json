@@ -11,9 +11,12 @@
     "native-base": "^2.8.1",
     "react": "16.6.0-alpha.8af6728",
     "react-native": "0.57.4",
+    "react-native-audio-streamer": "0.0.9",
+    "react-native-pdf": "^5.0.9",
     "react-native-slider": "^0.11.0",
     "react-navigation": "^2.18.2",
-    "react-navigation-transitions": "^1.0.5"
+    "react-navigation-transitions": "^1.0.5",
+    "rn-fetch-blob": "^0.10.13"
   },
   "devDependencies": {
     "babel-jest": "23.6.0",

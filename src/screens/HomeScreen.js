@@ -116,16 +116,16 @@ export default class HomeScreen extends Component {
 
     return (
       <StyleProvider style={getTheme(scorenshareTheme)}>
-        {this.state.isLoading ? (
-          <LoaderOverlay text={"Fetching... Please wait"} />
-        ) : this.state.ajaxCallState == "NET_ERR" ? (
-          <ErrorOverlay
-            text={this.state.ajaxCallError}
-            reloadPage={this.initLandingPage}
-          />
-        ) : (
-          <Container>
-            <Content style={styles.bgDark}>
+        <Container>
+          <Content style={styles.bgDark}>
+            {this.state.isLoading ? (
+              <LoaderOverlay text={"Fetching... Please wait"} />
+            ) : this.state.ajaxCallState == "NET_ERR" ? (
+              <ErrorOverlay
+                text={this.state.ajaxCallError}
+                reloadPage={this.initLandingPage}
+              />
+            ) : (
               <Grid>
                 <Row style={styles.carouselContainer}>
                   <Col style={styles.carouselBody}>
@@ -177,14 +177,14 @@ export default class HomeScreen extends Component {
                   </View>
                 )}
               </Grid>
-            </Content>
-            <AppNavFooter
-              activeTab={"Home"}
-              nav={navigate}
-              reloadLanding={this.initLandingPage}
-            />
-          </Container>
-        )}
+            )}
+          </Content>
+          <AppNavFooter
+            activeTab={"Home"}
+            nav={navigate}
+            reloadLanding={this.initLandingPage}
+          />
+        </Container>
       </StyleProvider>
     );
   }

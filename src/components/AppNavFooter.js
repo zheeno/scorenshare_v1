@@ -1,5 +1,5 @@
 import React from "react";
-import { Footer, FooterTab, Button, Icon } from "native-base";
+import { Footer, FooterTab, Button, Icon, Text } from "native-base";
 import { styles } from "../themes/variables/customStyles";
 
 const AppNavFooter = props => {
@@ -19,6 +19,7 @@ const AppNavFooter = props => {
             name="md-albums"
             active={props.activeTab == "Home" ? true : false}
           />
+          <Text>Feeds</Text>
         </Button>
         <Button
           onPress={() => {
@@ -30,12 +31,17 @@ const AppNavFooter = props => {
             active={props.activeTab == "Catalogue" ? true : false}
             name="ios-disc"
           />
+          <Text>Catalogues</Text>
         </Button>
-        <Button active={props.activeTab == "Music" ? true : false}>
+        <Button
+          onPress={() => navigate("ComposersScreen")}
+          active={props.activeTab == "ComposersScreen" ? true : false}
+        >
           <Icon
-            active={props.activeTab == "Music" ? true : false}
-            name="ios-musical-notes"
+            active={props.activeTab == "ComposersScreen" ? true : false}
+            name="ios-people"
           />
+          <Text>Composers</Text>
         </Button>
         <Button
           onPress={() =>
@@ -47,6 +53,7 @@ const AppNavFooter = props => {
             active={props.activeTab == "Search" ? true : false}
             name="ios-search"
           />
+          <Text>Search</Text>
         </Button>
       </FooterTab>
     </Footer>

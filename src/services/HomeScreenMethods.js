@@ -22,43 +22,47 @@ export function renderFeed(feed, navigate) {
 
 export function renderMusicScrollList(feed, navigate) {
   return (
-    <React.Fragment key={"Frag_"+feed.catalogue.id}>
-    {/* check if the catalogue has music contents */}
-    {feed.musics.length > 0 ?
-    <Row key={feed.catalogue.id}>
-      <Col style={styles.padTop25}>
-        <Text style={[styles.redText, { marginLeft: 25 }]}>
-          {feed.catalogue.category}
-        </Text>
-        <Button
-          small
-          light
-          transparent
-          style={[{ right: 5, top: 20, position: "absolute" }]}
-          onPress={() =>
-            navigate("CatalogueContent", {
-              id: feed.catalogue.id,
-              title: feed.catalogue.category,
-              content: feed
-            })
-          }
-        >
-          <Text style={{ fontSize: 12 }}>More</Text>
-        </Button>
-        <ScrollView horizontal>
-          <Grid style={{ overflowX: "auto" }}>
-            {feed.musics.map(music => (
-              <Col key={music.id} style={styles.musicCardContainer}>
-                <MusicCard nav={navigate} content={music} />
-              </Col>
-            ))}
-          </Grid>
-        </ScrollView>
-      </Col>
-    </Row>
-      : <Text>&nbsp;</Text>
-      }
-      </React.Fragment>
+    <React.Fragment key={"Frag_" + feed.catalogue.id}>
+      {/* check if the catalogue has music contents */}
+      {feed.musics.length > 0 ? (
+        <Row key={feed.catalogue.id}>
+          <Col style={styles.padTop25}>
+            <Text style={[styles.redText, { marginLeft: 25 }]}>
+              {feed.catalogue.category}
+            </Text>
+            <Button
+              small
+              light
+              transparent
+              style={[{ right: 5, top: 20, position: "absolute" }]}
+              onPress={() =>
+                navigate("CatalogueContent", {
+                  id: feed.catalogue.id,
+                  title: feed.catalogue.category,
+                  content: feed
+                })
+              }
+            >
+              <Text style={{ fontSize: 12 }}>More</Text>
+            </Button>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+              <Grid style={{ overflowX: "auto" }}>
+                {feed.musics.map(musicObj => (
+                  <Col
+                    key={musicObj.music.id}
+                    style={styles.musicCardContainer}
+                  >
+                    <MusicCard nav={navigate} content={musicObj} />
+                  </Col>
+                ))}
+              </Grid>
+            </ScrollView>
+          </Col>
+        </Row>
+      ) : (
+        <Text>&nbsp;</Text>
+      )}
+    </React.Fragment>
   );
 }
 
@@ -68,19 +72,19 @@ export function renderUserScrollList(feed, navigate) {
       {/* featured contents */}
       <Col style={styles.padTop25}>
         <Text style={[styles.redText, { marginLeft: 25 }]}>{feed.title}</Text>
-        <Text
+        {/* <Text
           style={[
             styles.greyText,
             { right: 10, top: 25, position: "absolute", fontSize: 12 }
           ]}
         >
           More
-        </Text>
-        <ScrollView horizontal>
+        </Text> */}
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           <Grid style={{ overflowX: "auto" }}>
             {feed.content.map(content => (
               <Col key={content.id} style={styles.musicCardContainer}>
-                <ComposerCard content={content} />
+                <ComposerCard nav={navigate} content={content} />
               </Col>
             ))}
           </Grid>

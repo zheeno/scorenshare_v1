@@ -71,7 +71,7 @@ class MusicInfoModal extends Component {
               </View>
             </View>
             {/* description */}
-            <View>
+            <View style={{ paddingLeft: 50 }}>
               <Text style={[styles.greyText]}>
                 {this.props.content.music.notes}
               </Text>
@@ -95,9 +95,157 @@ class MusicInfoModal extends Component {
               </View>
             </View>
             <ScrollView>
+              {/* engagement summary */}
+              <View style={{ flex: 1 }}>
+                <Text style={[styles.redText]}>Engagement</Text>
+                {/* likes */}
+                <View
+                  style={{
+                    flex: 1,
+                    flexDirection: "row",
+                    marginTop: 20
+                  }}
+                >
+                  <View
+                    style={{
+                      flex: 1,
+                      alignItems: "center"
+                    }}
+                  >
+                    <Icon
+                      name="ios-heart"
+                      style={[styles.darkText, { fontSize: 15 }]}
+                    />
+                  </View>
+                  <View
+                    style={{
+                      flex: 8,
+                      justifyContent: "center"
+                    }}
+                  >
+                    <View
+                      style={{
+                        height: 5,
+                        width:
+                          this.props.content.engagement.likes.ratio.toString() +
+                          "%",
+                        backgroundColor: this.props.content.engagement.likes.color.toString()
+                      }}
+                    />
+                  </View>
+                </View>
+                {/* reviews */}
+                <View
+                  style={{
+                    flex: 1,
+                    flexDirection: "row",
+                    marginTop: 5
+                  }}
+                >
+                  <View
+                    style={{
+                      flex: 1,
+                      alignItems: "center"
+                    }}
+                  >
+                    <Icon
+                      name="ios-chatboxes"
+                      style={[styles.darkText, { fontSize: 15 }]}
+                    />
+                  </View>
+                  <View
+                    style={{
+                      flex: 8,
+                      justifyContent: "center"
+                    }}
+                  >
+                    <View
+                      style={{
+                        height: 5,
+                        width:
+                          this.props.content.engagement.reviews.ratio.toString() +
+                          "%",
+                        backgroundColor: this.props.content.engagement.reviews.color.toString()
+                      }}
+                    />
+                  </View>
+                </View>
+                {/* downloads */}
+                <View
+                  style={{
+                    flex: 1,
+                    flexDirection: "row",
+                    marginTop: 5
+                  }}
+                >
+                  <View
+                    style={{
+                      flex: 1,
+                      alignItems: "center"
+                    }}
+                  >
+                    <Icon
+                      name="ios-cloud-download"
+                      style={[styles.darkText, { fontSize: 15 }]}
+                    />
+                  </View>
+                  <View
+                    style={{
+                      flex: 8,
+                      justifyContent: "center"
+                    }}
+                  >
+                    <View
+                      style={{
+                        height: 5,
+                        width:
+                          this.props.content.engagement.downloads.ratio.toString() +
+                          "%",
+                        backgroundColor: this.props.content.engagement.downloads.color.toString()
+                      }}
+                    />
+                  </View>
+                </View>
+                {/* page visits */}
+                <View
+                  style={{
+                    flex: 1,
+                    flexDirection: "row",
+                    marginTop: 5
+                  }}
+                >
+                  <View
+                    style={{
+                      flex: 1,
+                      alignItems: "center"
+                    }}
+                  >
+                    <Icon
+                      name="ios-eye"
+                      style={[styles.darkText, { fontSize: 15 }]}
+                    />
+                  </View>
+                  <View
+                    style={{
+                      flex: 8,
+                      justifyContent: "center"
+                    }}
+                  >
+                    <View
+                      style={{
+                        height: 5,
+                        width:
+                          this.props.content.engagement.pageVisits.ratio.toString() +
+                          "%",
+                        backgroundColor: this.props.content.engagement.pageVisits.color.toString()
+                      }}
+                    />
+                  </View>
+                </View>
+              </View>
               {/* reviews */}
               {this.props.content.reviews.length > 0 ? (
-                <View>
+                <View style={{ marginTop: 20 }}>
                   <Text style={[styles.redText]}>Reviews</Text>
                   <Text
                     style={[

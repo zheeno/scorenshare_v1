@@ -24,41 +24,14 @@ import {
   ErrorOverlay
 } from "../components/MiscComponents";
 import { GetData } from "../services/ApiCaller";
+import ComposerListItem from "../components/Composer/ComposerListItem";
 // import { renderCatalogue } from "../services/CatalogueScreenMethods";
 
-class CatalogueScreen extends Component {
-  // state = {
-  //   catalogues: [
-  //     {
-  //       id: 1,
-  //       category: "Contemporary",
-  //       description: "Lorem espium modus suprede echma nostum",
-  //       numSongs: 3
-  //     },
-  //     {
-  //       id: 2,
-  //       category: "Gospel",
-  //       description: "Lorem espium modus suprede echma nostum",
-  //       numSongs: 3
-  //     },
-  //     {
-  //       id: 3,
-  //       category: "Afro Beats",
-  //       description: "Lorem espium modus suprede echma nostum",
-  //       numSongs: 3
-  //     },
-  //     {
-  //       id: 4,
-  //       category: "Felabration",
-  //       description: "Lorem espium modus suprede echma nostum",
-  //       numSongs: 30
-  //     }
-  //   ]
-  // };
+class ComposersContentScreen extends Component {
   componentDidMount() {
-    // const { id } = this.props.match.params;
-    this.initCataloguePage();
+    this.initComposersPage();
   }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -66,20 +39,20 @@ class CatalogueScreen extends Component {
       ajaxCallState: "fetching",
       ajaxCallError: null,
       carousel: [],
-      catalogues: []
+      composers: []
     };
   }
 
-  initCataloguePage = () => {
+  initComposersPage = () => {
     this.setState({ isLoading: true });
-    GetData("catalogues?resType=json")
+    GetData("composers?resType=json")
       .then(result => {
         let response = result;
         this.setState({
           isLoading: false,
           ajaxCallState: 200,
           ajaxCallError: null,
-          catalogues: response.catalogues
+          composers: response.composers
         });
       })
       .catch(error => {
@@ -107,7 +80,7 @@ class CatalogueScreen extends Component {
             ) : this.state.ajaxCallState == "NET_ERR" ? (
               <ErrorOverlay
                 text={this.state.ajaxCallError}
-                reloadPage={this.initCataloguePage}
+                reloadPage={this.initComposersPage}
               />
             ) : (
               <ScrollView>
@@ -116,32 +89,14 @@ class CatalogueScreen extends Component {
                     navigate("SearchScreenContent", { params: options })
                   }
                 />
-                {/* loop through catalogues */}
-                {this.state.catalogues.length > 0 ? (
+                {this.state.composers.length > 0 ? (
                   <List
-                    dataArray={this.state.catalogues}
-                    renderRow={catalogue => (
-                      <ListItem
-                        onPress={() =>
-                          navigate("CatalogueContent", {
-                            id: catalogue.id,
-                            title: catalogue.category,
-                            content: catalogue
-                          })
-                        }
-                      >
-                        <Body>
-                          <Text
-                            numberOfLines={1}
-                            style={[styles.redText, styles.catalogueCardTitle]}
-                          >
-                            {catalogue.category}
-                          </Text>
-                          <Text note numberOfLines={2} style={styles.greyText}>
-                            {catalogue.description}
-                          </Text>
-                        </Body>
-                      </ListItem>
+                    dataArray={this.state.composers}
+                    renderRow={result => (
+                      <ComposerListItem
+                        content={result.composer[0]}
+                        nav={navigate}
+                      />
                     )}
                   />
                 ) : (
@@ -166,9 +121,9 @@ class CatalogueScreen extends Component {
             )}
           </Content>
           <AppNavFooter
-            activeTab={"Catalogue"}
+            activeTab={"ComposersScreen"}
             nav={navigate}
-            reloadCatalogues={this.initCataloguePage}
+            reloadComposers={this.initComposersPage}
           />
         </Container>
       </StyleProvider>
@@ -176,4 +131,4 @@ class CatalogueScreen extends Component {
   }
 }
 
-export default CatalogueScreen;
+export default ComposersContentScreen;

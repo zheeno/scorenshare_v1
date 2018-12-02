@@ -30,7 +30,7 @@ export default (variables /*: * */ = variable) => {
           fontSize: variables.titleFontSize - 2,
           fontFamily: variables.titleFontfamily,
           textAlign: "center",
-          fontWeight: "500",
+          fontWeight: "300",
           paddingBottom: 3
         },
         "NativeBase.Subtitle": {
@@ -50,7 +50,10 @@ export default (variables /*: * */ = variable) => {
       shadowRadius: null,
       shadowOpacity: null,
       paddingTop: platform === "android" ? StatusBar.currentHeight : undefined,
-      height: platform === "android" ? variables.toolbarHeight + StatusBar.currentHeight : variables.toolbarHeight
+      height:
+        platform === "android"
+          ? variables.toolbarHeight + StatusBar.currentHeight
+          : variables.toolbarHeight
     },
     ".noShadow": {
       elevation: 0,
@@ -113,7 +116,7 @@ export default (variables /*: * */ = variable) => {
       ".transparent": {
         "NativeBase.Text": {
           color: variables.toolbarBtnTextColor,
-          fontWeight: "600"
+          fontWeight: "300"
         },
         "NativeBase.Icon": {
           color: variables.toolbarBtnColor
@@ -157,7 +160,7 @@ export default (variables /*: * */ = variable) => {
       "NativeBase.Button": {
         ".transparent": {
           "NativeBase.Text": {
-            fontWeight: "500"
+            fontWeight: "300"
           },
           paddingHorizontal: null,
           paddingLeft: platform === "ios" ? 10 : null

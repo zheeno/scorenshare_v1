@@ -13,9 +13,12 @@ import {
   Body,
   Container,
   Spinner,
-  Row
+  Row,
+  List
 } from "native-base";
 import { styles } from "../themes/variables/customStyles";
+import MusicListItem from "./Music/MusicListItem";
+import { Col } from "react-native-easy-grid";
 
 export const ErrorOverlay = props => {
   return (
@@ -46,11 +49,6 @@ export const ErrorOverlay = props => {
         >
           <Text style={[styles.greyText, { marginLeft: 5, fontSize: 15 }]}>
             {props.text}
-          </Text>
-          <Text
-            style={[styles.greyText, { alignSelf: "center", fontSize: 15 }]}
-          >
-            Kindly check your network
           </Text>
         </Row>
         <Row
@@ -179,7 +177,43 @@ export class SearchBarLink extends Component {
     );
   }
 }
-
+export class MusicArrayToList extends Component {
+  constructor(props) {
+    super(props);
+    navigate = props.nav;
+  }
+  render() {
+    return (
+      <View style={[styles.bgDark, { flex: 1 }]}>
+        {/* music collection created by the selected composer*/}
+        {this.props.musicArray.length > 0 ? (
+          <List
+            dataArray={this.props.musicArray}
+            renderRow={musicObj => (
+              <MusicListItem musicObj={musicObj} nav={navigate} />
+            )}
+          />
+        ) : (
+          <Col
+            style={[
+              {
+                alignItems: "center",
+                justifyContent: "center",
+                height: 200
+              }
+            ]}
+          >
+            <Icon
+              name="md-information-circle"
+              style={[styles.darkText, { fontSize: 50 }]}
+            />
+            <Text style={[styles.darkText]}>Nothing here to see</Text>
+          </Col>
+        )}
+      </View>
+    );
+  }
+}
 export class SearchBar extends Component {
   constructor(props) {
     super(props);

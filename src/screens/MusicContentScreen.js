@@ -1,15 +1,19 @@
 import React, { Component } from "react";
-import { ScrollView, Modal, Alert, findNodeHandle, Image } from "react-native";
+import {
+  ScrollView,
+  Dimensions,
+  findNodeHandle,
+  DeviceEventEmitter
+} from "react-native";
 import {
   Container,
   StyleProvider,
   Text,
-  View,
-  Button,
-  Item,
-  ActionSheet
+  ActionSheet,
+  Tabs,
+  ScrollableTab,
+  Tab
 } from "native-base";
-// import Pdf from 'react-native-pdf';
 import { Row, Grid } from "react-native-easy-grid";
 import getTheme from "../themes/components";
 import scorenshareTheme from "../themes/variables/scorenshareTheme";
@@ -18,12 +22,23 @@ import FooterPlayer from "../components/Music/FooterPlayer";
 import { LoaderOverlay, ErrorOverlay } from "../components/MiscComponents";
 import { GetData } from "../services/ApiCaller";
 import MusicInfoModal from "../components/Music/MusicInfoModal";
-
+import RNAudioStreamer from "react-native-audio-streamer";
+import PdfReader from "../components/PdfReader";
+var RNTimer = null;
+var host = "http://192.168.43.183/";
 class MusicContentScreen extends Component {
   componentDidMount() {
     this.initMusicContentPage();
+    this.subscription = DeviceEventEmitter.addListener(
+      "RNAudioStreamerStatusChanged",
+      this._statusChanged.bind(this)
+    );
   }
 
+  componentWillUnmount() {
+    RNAudioStreamer.pause();
+    // clearInterval(RNTimer);
+  }
   constructor(props) {
     super(props);
     this.state = {
@@ -33,13 +48,13 @@ class MusicContentScreen extends Component {
       ajaxCallState: "fetching",
       ajaxCallError: null,
       paused: true,
-      totalLength: 1,
+      totalLength: 0,
       currentPosition: 0,
-      selectedTrack: 0,
-      repeatOn: false,
-      shuffleOn: false,
-      isChanging: true,
+      playerState: "BUFFERING",
       musicObj: [],
+      solfa: null,
+      staff: null,
+      track: null,
       like: false
     };
 
@@ -75,11 +90,12 @@ class MusicContentScreen extends Component {
     this.DESTRUCTIVE_INDEX = null;
     this.CANCEL_INDEX = null;
     this.buttonIndexes = this.buttonIndexes.bind(this);
+    this.musId = this.props.navigation.getParam("id", "NULL");
+    this.initMusicContentPage = this.initMusicContentPage.bind(this);
   }
-  // const source = {uri:'http://samples.leanpub.com/thereactnativebook-sample.pdf',cache:true};
 
   initMusicContentPage = () => {
-    musId = this.props.navigation.getParam("id", "NULL");
+    musId = this.musId;
     this.setState({ isLoading: true });
     GetData("music/collection/" + musId + "?resType=json")
       .then(result => {
@@ -92,6 +108,31 @@ class MusicContentScreen extends Component {
           musicObj: response.musicObj
         });
         this.buttonIndexes();
+        // set track
+        this.state.musicObj.files.forEach(file => {
+          // get files
+          switch (file.destination) {
+            case "solfa_notes":
+              this.setState({
+                solfa: host + file.url
+              });
+              break;
+            case "audio_video":
+              this.setState({ track: host + file.url });
+              RNAudioStreamer.setUrl(this.state.track);
+              // RNAudioStreamer.play();
+              // this.StartRNTimer(1000);
+              break;
+            default:
+              this.setState({
+                staff: host + file.url
+              });
+              break;
+          }
+          RNAudioStreamer.duration((err, duration) => {
+            if (!err) this.setState({ totalLength: duration }); //seconds
+          });
+        });
       })
       .catch(error => {
         this.setState({
@@ -142,53 +183,50 @@ class MusicContentScreen extends Component {
     });
   };
 
-  static navigationOptions = ({ navigation }) => {
-    return {
-      title: null,
-      headerTransparent: true,
-      headerStyle: {
-        backgroundColor: "transparent"
-      }
-    };
-  };
+  _statusChanged(status) {
+    this.setState({ playerState: status });
+    // reset player if status is FINISHED
+    if (status == "FINISHED") {
+      clearInterval(RNTimer);
+      this.seek(0);
+      RNAudioStreamer.pause();
+      this.setState({ paused: true });
+    }
+  }
+  _timers() {
+    RNAudioStreamer.currentTime((err, currentTime) => {
+      if (!err) this.setState({ currentPosition: currentTime }); //seconds
+    });
+  }
+  seek(time) {
+    clearInterval(RNTimer);
+    time = Math.round(time);
+    RNAudioStreamer.seekToTime(time); //seconds
+    if (this.state.paused == false) {
+      RNAudioStreamer.play();
+    }
+    this.setState({
+      currentPosition: time,
+      paused: false
+    });
+    this.StartRNTimer(1000);
+  }
+
+  StartRNTimer(interval) {
+    RNTimer = setInterval(() => {
+      this._timers();
+    }, interval);
+  }
 
   render() {
     const { navigate } = this.props.navigation;
-    const tracks = [
-      {
-        title: "Stressed Out",
-        artist: "Twenty One Pilots",
-        albumArtUrl:
-          "http://36.media.tumblr.com/14e9a12cd4dca7a3c3c4fe178b607d27/tumblr_nlott6SmIh1ta3rfmo1_1280.jpg",
-        audioUrl:
-          "http://dl.fazmusics.in/Ali/music/aban/hot%20100%20.7%20nov%202015(128)/Twenty%20One%20Pilots%20-%20Stressed%20Out.mp3"
-      },
-      {
-        title: "Love Yourself",
-        artist: "Justin Bieber",
-        albumArtUrl:
-          "http://arrestedmotion.com/wp-content/uploads/2015/10/JB_Purpose-digital-deluxe-album-cover_lr.jpg",
-        audioUrl:
-          "http://srv2.dnupload.com/Music/Album/Justin%20Bieber%20-%20Purpose%20(Deluxe%20Version)%20(320)/Justin%20Bieber%20-%20Purpose%20(Deluxe%20Version)%20128/05%20Love%20Yourself.mp3"
-      },
-      {
-        title: "Hotline Bling",
-        artist: "Drake",
-        albumArtUrl:
-          "https://upload.wikimedia.org/wikipedia/commons/c/c9/Drake_-_Hotline_Bling.png",
-        audioUrl:
-          "http://dl2.shirazsong.org/dl/music/94-10/CD%201%20-%20Best%20of%202015%20-%20Top%20Downloads/03.%20Drake%20-%20Hotline%20Bling%20.mp3"
-      },
-      {
-        title: "Heart to love",
-        artist: "Passanger",
-        albumArtUrl:
-          "https://upload.wikimedia.org/wikipedia/commons/c/c9/Drake_-_Hotline_Bling.png",
-        audioUrl:
-          "https://naijaextra.com/wp-content/uploads/2018/07/Passenger-Heart-To-Love.mp3"
-      }
-    ];
-
+    // Player Status:
+    // - PLAYING
+    // - PAUSED
+    // - STOPPED
+    // - FINISHED
+    // - BUFFERING
+    // - ERROR
     return (
       <StyleProvider style={getTheme(scorenshareTheme)}>
         {this.state.isLoading ? (
@@ -206,45 +244,41 @@ class MusicContentScreen extends Component {
                   styles.bgWhite,
                   {
                     flex: 3,
-                    flexDirection: "row"
+                    flexDirection: "column-reverse"
                   }
                 ]}
               >
-                <ScrollView>
-                  {/* <View style={styles.PdfContainer}> 
-                     <Pdf
-                      source={source}
-                      onLoadComplete={(numberOfPages, filePath) => {
-                        console.log(`number of pages: ${numberOfPages}`);
-                      }}
-                      onPageChanged={(page, numberOfPages) => {
-                        console.log(`current page: ${page}`);
-                      }}
-                      onError={error => {
-                        console.log(error);
-                      }}
-                      style={styles.pdf}
-                    />
-                  </View> */}
-                </ScrollView>
+                <Tabs
+                  renderTabBar={() => (
+                    <ScrollableTab backgroundColor="#1d060a" />
+                  )}
+                >
+                  {this.state.staff != null ? (
+                    <Tab heading={"Staff Notes"}>
+                      <PdfReader file={{ uri: this.state.staff }} />
+                    </Tab>
+                  ) : null}
+                  {this.state.solfa != null ? (
+                    <Tab heading="Solfa Notes">
+                      <PdfReader file={{ uri: this.state.solfa }} />
+                    </Tab>
+                  ) : null}
+                </Tabs>
               </Row>
               <FooterPlayer
                 content={this.state.musicObj}
-                tracks={tracks}
-                selectedTrack={this.state.selectedTrack}
+                playerState={this.state.playerState}
                 currentPosition={this.state.currentPosition}
                 totalLength={this.state.totalLength}
                 paused={this.state.paused}
-                trackPaused={() => this.setState({ paused: true })}
-                trackPlayed={() => this.setState({ paused: false })}
-                Shuffle={() =>
-                  this.setState({ shuffleOn: !this.state.shuffleOn })
-                }
-                shuffleState={this.state.shuffleOn}
-                Repeat={() => this.setState({ repeatOn: !this.state.repeatOn })}
-                repeatState={this.state.repeatOn}
-                forwardDisabled={this.state.selectedTrack === tracks.length - 1}
-                isChanging={this.state.isChanging}
+                trackPaused={() => {
+                  RNAudioStreamer.pause();
+                  this.setState({ paused: true });
+                }}
+                trackPlayed={() => {
+                  RNAudioStreamer.play();
+                  this.setState({ paused: false });
+                }}
                 toggleModal={() => {
                   this.setModalVisible();
                 }}
@@ -252,6 +286,8 @@ class MusicContentScreen extends Component {
                 onLike={() => {
                   this.setState({ like: !this.state.like });
                 }}
+                seek={time => this.seek(time)}
+                navigate={navigate}
               />
               {/* modal */}
               <MusicInfoModal
