@@ -1,17 +1,6 @@
 import React, { Component } from "react";
 import { Image } from "react-native";
-import {
-  Card,
-  CardItem,
-  Text,
-  Body,
-  Icon,
-  Button,
-  ListItem,
-  Left,
-  Right,
-  View
-} from "native-base";
+import { Text, Body, Icon, ListItem, Left, View } from "native-base";
 import { styles } from "../../themes/variables/customStyles";
 
 const ComposerListItem = props => {
@@ -22,8 +11,8 @@ const ComposerListItem = props => {
       thumbnail
       onPress={() =>
         navigate("ComposerContent", {
-          id: props.content.id,
-          title: props.content.name
+          id: props.content.composer.id,
+          title: props.content.composer.name
         })
       }
     >
@@ -53,13 +42,26 @@ const ComposerListItem = props => {
           numberOfLines={1}
           style={[styles.greyText, styles.catalogueCardTitle]}
         >
-          {props.content.name}
+          {props.content.composer.name}
         </Text>
-        <Text
-          numberOfLines={1}
-          style={[styles.darkText, { fontSize: 12, marginTop: -5 }]}
-        >
-          Sub data
+        <Text>
+          <Text style={[styles.darkText, { fontSize: 12, marginTop: -5 }]}>
+            <Icon
+              style={[styles.darkText, { fontSize: 12 }]}
+              name="ios-musical-note"
+            />
+            &nbsp;&middot;&nbsp;
+            {props.content.collection.length}
+          </Text>
+          <Text style={[styles.darkText, { fontSize: 12, marginTop: -5 }]}>
+            &nbsp;&nbsp;
+            <Icon
+              style={[styles.darkText, { fontSize: 12, marginTop: -5 }]}
+              name="ios-people"
+            />
+            &nbsp;&middot;&nbsp;
+            {props.content.followers}
+          </Text>
         </Text>
       </Body>
     </ListItem>

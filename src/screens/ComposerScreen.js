@@ -52,7 +52,7 @@ class ComposerScreen extends Component {
   }
 
   initComposerContentPage() {
-    const compId = this.props.navigation.getParam("id", "NULL");
+    compId = this.props.navigation.getParam("id", "NULL");
     this.setState({ isLoading: true });
     GetData("composers/" + compId + "?resType=json")
       .then(result => {

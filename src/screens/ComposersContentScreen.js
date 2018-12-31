@@ -94,7 +94,7 @@ class ComposersContentScreen extends Component {
                     dataArray={this.state.composers}
                     renderRow={result => (
                       <ComposerListItem
-                        content={result.composer[0]}
+                        content={result}
                         nav={navigate}
                       />
                     )}

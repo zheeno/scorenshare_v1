@@ -95,12 +95,6 @@ class CatalogueContentScreen extends Component {
                 reloadPage={this.initCatalogueContentPage}
               />
             ) : (
-              <Container
-                style={{
-                  flex: 1
-                }}
-              >
-                <Content style={[styles.bgDark]}>
                   <Grid>
                     <Row
                       style={[
@@ -150,66 +144,6 @@ class CatalogueContentScreen extends Component {
                         </Text>
                       </View>
                     </Row>
-                    <Row style={styles.darkBg}>
-                      <Item
-                        style={[
-                          styles.noBorders,
-                          styles.positionCenter,
-                          styles.flexColumn
-                        ]}
-                      >
-                        <Icon
-                          name="ios-musical-notes"
-                          style={[
-                            styles.greyText,
-                            {
-                              fontSize: 20
-                            }
-                          ]}
-                        />
-                        <Item style={[styles.noBorders, { marginLeft: 10 }]}>
-                          <Text
-                            style={[
-                              styles.greyText,
-                              {
-                                fontSize: 15
-                              }
-                            ]}
-                          >
-                            {this.state.musics.length}
-                          </Text>
-                        </Item>
-                      </Item>
-                      <Item
-                        style={[
-                          styles.noBorders,
-                          styles.positionCenter,
-                          styles.flexColumn
-                        ]}
-                      >
-                        <Icon
-                          name="ios-musical-notes"
-                          style={[
-                            styles.greyText,
-                            {
-                              fontSize: 20
-                            }
-                          ]}
-                        />
-                        <Item style={[styles.noBorders, { marginLeft: 10 }]}>
-                          <Text
-                            style={[
-                              styles.greyText,
-                              {
-                                fontSize: 15
-                              }
-                            ]}
-                          >
-                            {this.state.musics.length}
-                          </Text>
-                        </Item>
-                      </Item>
-                    </Row>
                     <Row>
                       <SearchBarLink
                         openSearchScreen={options =>
@@ -225,9 +159,6 @@ class CatalogueContentScreen extends Component {
                       />
                     </Row>
                   </Grid>
-                </Content>
-                <AppNavFooter activeTab={"Catalogue"} nav={navigate} />
-              </Container>
             )}
           </Content>
           <AppNavFooter activeTab={"Catalogue"} nav={navigate} />
