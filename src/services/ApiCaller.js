@@ -1,5 +1,5 @@
 export function GetData(hash) {
-  let BaseUrl = "http://192.168.43.183/api/";
+  let BaseUrl = "https://scroenshare.com/api/";
 
   return new Promise((resolve, reject) => {
     fetch(BaseUrl + hash, {
@@ -17,7 +17,7 @@ export function GetData(hash) {
 }
 
 export function PostData(hash, data) {
-  let BaseUrl = "http://sheethub.cluster/";
+  let BaseUrl = "https://scroenshare.com/";
 
   return new Promise((resolve, reject) => {
     fetch(BaseUrl + hash, {
